@@ -58,14 +58,15 @@ class SplunkDownload(object):
         self.lbl4 = Label(window, text="query")
         self.lbl4.grid(column=0, row=5)
 
-        self.txt4 = Text(window, height=5)
+        self.txt4 = Text(window, width=50, height=3)
         self.txt4.insert(END, config_read(self.config_file_name, self.splunk_section_name, self.query))
         self.txt4.bind('<Return>', self.parse)
         self.txt4.grid(column=1, row=5)
 
         # last row buttons
-        self.btn1 = Button(window, text="Get Log", command=self.button_clicked)
-        self.btn1.grid(column=0, row=6)
+        self.btn1 = Button(window, text="Get Eqp Log From Splunk", command=self.button_clicked, bg='#54FA9B',
+                           activebackground='#54FA9B')
+        self.btn1.grid(column=0, row=6, columnspan=2, sticky=W + E)
 
         window.mainloop()
 
