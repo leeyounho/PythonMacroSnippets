@@ -1,5 +1,6 @@
 import yaml
 
+
 class YamlWrapper:
     def __init__(self, config_file_name):
         self.config_file_name = config_file_name
@@ -20,4 +21,3 @@ if __name__ == '__main__':
 
     for key, value in yamlWrapper.read()['S3'].items():
         print(key, value)
-
