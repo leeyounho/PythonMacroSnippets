@@ -1,14 +1,12 @@
 from tkinter import *
 
-from common import *
-
 
 class SplunkDownload(object):
-    # config file information
-    config_file_name = 'config.ini'
+    # reader file information
+    config_file_name = 'config/config.ini'
     splunk_section_name = 'splunk_section'
 
-    # config file keys & values
+    # reader file keys & values
     splunk_id = 'splunk_id'
     splunk_password = 'splunk_password'
     eqp_id = 'EQP_ID'
