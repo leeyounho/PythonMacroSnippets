@@ -1,3 +1,9 @@
+# TODO
+# ui package 에는 tkinter sample 만들고
+# dataframe_manager는 dataframe wrapper 만들고
+# disc package에는 discord bot 만들고
+# oracle_manager 에는 oracle 접속 wrapper 만들고
+
 import tkinter as tk
 from tkinter import ttk
 

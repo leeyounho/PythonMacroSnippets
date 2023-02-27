@@ -1,4 +1,3 @@
-# TODO 미완성
 # disc developer portal : https://discord.com/developers/applications
 # API reference : https://discordpy-ko.github.io/api.html
 
