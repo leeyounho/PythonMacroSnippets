@@ -1,39 +1,31 @@
-# TODO
-# ui package 에는 tkinter sample 만들고
-# dataframe_manager는 dataframe wrapper 만들고
-# disc package에는 discord bot 만들고
-# oracle_manager 에는 oracle 접속 wrapper 만들고
+import ssl
+import smtplib
 
-import tkinter as tk
-from tkinter import ttk
+from pynotifier import NotificationClient, Notification
+from pynotifier.backends import platform, smtp
 
-# Create a new instance of Tkinter
-root = tk.Tk()
+smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465, context=ssl.create_default_context())
 
-# Set the window title
-root.title("My Tkinter App")
+c = NotificationClient()
 
-# Set the window size
-root.geometry("400x300")
+c.register_backend(platform.Backend())
+c.register_backend(smtp.Backend(server=smtp_server,
+                                name='My Organization',
+                                email='sender@organization.com',
+                                password='super_password'))
 
-# Set the style to a modern theme
-style = ttk.Style()
-style.theme_use("clam")
+filenames = [
+  'path/to/file1.json',
+  'path/to/file2.txt',
+  # ...
+]
 
-# Create a label widget and add it to the window
-label = ttk.Label(root, text="Hello, Tkinter!", font=("Segoe UI", 16))
-label.pack(pady=20)
+attachments = []
+for filename in filenames:
+	attachments.append(smtp.Attachment(open(filename, 'rb'), filename))
 
-# Create a button widget and add it to the window
-button = ttk.Button(root, text="Click me!", style=style)
-button.pack()
+smtp_config = smtp.NotificationConfig(emails=['receiver_1@email.com', 'receiver_2@email.com'],
+                                      attachments=attachments)
+notification = Notification(title='Hello', message='World', smtp=smtp_config)
 
-# Define a function to handle button click events
-def on_button_click():
-    label.config(text="Button clicked!", foreground="green")
-
-# Bind the button click event to the function
-button.config(command=on_button_click)
-
-# Run the Tkinter event loop
-root.mainloop()
+c.notify_all(notification)
