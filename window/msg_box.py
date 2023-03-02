@@ -43,12 +43,10 @@ class MsgBox:
     def msgbox_retrycancel(self, title, body):  # retry : 4 / cancel : 2
         return True if win32api.MessageBox(self.handler, body, title, win32con.MB_RETRYCANCEL) == 4 else False
 
-    # TODO app_name이 안나오네
-    def toast_message(self, app_name, title, message, timeout):
+    def toast_message(self, title, message, timeout):
         notification.notify(
             title=title,
             message=message,
-            app_name=app_name,
             # app_icon='sample.ico',  # 'C:\\sample.ico'
             timeout=timeout,  # seconds
         )
@@ -56,5 +54,5 @@ class MsgBox:
 if __name__ == '__main__':
     msg_box = MsgBox(0)
     # msgBox.msgbox_retrycancel('test', 'testestset')
-    # msg_box.toast_message('test_app', 'title test', 'message test', 5)
-    msg_box.toast_message2()
+    msg_box.toast_message('title test', 'message test', 5)
+    # msg_box.toast_message2()
