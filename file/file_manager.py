@@ -44,7 +44,8 @@ class FileManager:
                                           ("all files", "*.*")), defaultextension="*.*")
 
     def ask_save_file_name(self):
-        return filedialog.asksaveasfilename(initialdir="/", filetypes=(("xlsx files", "*.xlsx"),
+        # initialdir = 바탕화면
+        return filedialog.asksaveasfilename(initialdir=os.path.join(os.path.join(os.path.expanduser('~')), 'Desktop') , filetypes=(("xlsx files", "*.xlsx"),
                                           ("all files", "*.*")), defaultextension="*.*")
 
     def ask_directory(self):
