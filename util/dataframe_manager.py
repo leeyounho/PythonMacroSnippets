@@ -4,77 +4,73 @@ import xlwings as xw
 from file.file_manager import FileManager
 
 
-# TODO xlwings로 바꿔야겠다..
 class DataFrameManager:
     def __init__(self):
         self.writer = None
 
+    # TODO 미완성
     def write_dataframe_to_excel(self, df, sheet_name):
-        # TODO 줄바꿈 없애고, index 살려야함
-        # style 정의
-        # df = df.style.set_table_styles(
-        #     [{
-        #         'selector': 'th',
-        #         'props': [
-        #             ('border', '1.3px solid black'),
-        #             ('font-size', '9pt'),
-        #             ('background-color', 'black'),
-        #             ('color', 'cyan')]
-        #     }])
-        styled_df = df.style.set_properties(
-            **{'border': '1.3px solid black', 'font-size': '9pt', 'text-align': 'center', 'vertical-align': 'middle'})
+        df = pd.DataFrame(
+            {'Data': ['234324325refgergdfgdfgdfgfdgsdfjgearhjkgelrhfkjshdkfjsdlfwsefesfsefsefse', 22, 23, 24]})
 
-        # df = df.set_table_styles(
-        #     select the table header with th and set it right align
-        # [dict(selector="th", props=[("text-align", "right")])]
-        # )
+        file_manager = FileManager()
+        save_file_name = file_manager.ask_save_file_name()
 
-        if self.writer is not None:
-            styled_df.to_excel(self.writer, sheet_name=sheet_name)
+        with xw.App(visible=False) as app:
+            wb = xw.Book()
 
-    def make_excel_writer(self, excel_file_name):
-        self.writer = pd.ExcelWriter(excel_file_name)
+            # create sheet
+            wb.sheets.add('temp')
 
-    def close_excel_writer(self):
-        if self.writer is not None:
-            self.writer.close()
+            # write dataframe
+            wb.sheets['temp']['A1'].value = df
+            wb.sheets['temp'].range('A1').expand('right').font.bold = True  # bold header
+            wb.sheets['temp'].range('A1').expand('right').color = '#A9A9A9'  # color header
+            wb.sheets['temp'].range('A1').expand('table').api.Borders.LineStyle = 1  # border
+            wb.sheets['temp'].range('A1').expand(
+                'table').api.HorizontalAlignment = xw.constants.HAlign.xlHAlignLeft  # left align
+            # wb.sheets['temp'].range('A1').expand(
+            #     'table').api.HorizontalAlignment = xw.constants.HAlign.xlHAlignCenter  # center align
+            wb.sheets['temp'].range('A1').expand('table').font.size = 9  # font 9
+            wb.sheets['temp'].autofit(axis="columns")  # autofit
+
+            # delete default sheets
+            wb.sheets['sheet1'].delete()
+            wb.sheets['sheet2'].delete()
+            wb.sheets['sheet3'].delete()
+
+            # excel 저장
+            wb.save(save_file_name)
+            wb.close()
+
+    # split dataframe to multi dataframe dict. delimiter is key. index will be reset
+    def df_split_to_df_dict(self, df_to_split, delimiter_column_name):
+        # set the index to be this and don't drop
+        if delimiter_column_name not in df_to_split.columns:
+            return {}
+
+        df_to_split.set_index(keys=[delimiter_column_name], drop=False, inplace=True)
+
+        # get a list of names
+        value_list = df_to_split[delimiter_column_name].unique().tolist()
+
+        # 합치기
+        ret_dict = {}
+        for value in value_list:
+            df_split = df_to_split.loc[df_to_split[delimiter_column_name] == value]
+            ret_dict[value] = df_split
+        return ret_dict
+
+    # TODO
+    # compare 2 dataframe and return diff dataframe.
+    def df_compare_to_diff_df(self, df_left, df_right):
+        return
 
 
 if __name__ == '__main__':
-    df = pd.DataFrame(
-        {'Data': ['234324325refgergdfgdfgdfgfdgsdfjgearhjkgelrhfkjshdkfjsdlfwsefesfsefsefse', 22, 23, 24]})
+    pass
 
-    file_manager = FileManager()
-    save_file_name = file_manager.ask_save_file_name()
-
-    with xw.App(visible=False) as app:
-        wb = xw.Book()
-
-        # create sheet
-        wb.sheets.add('temp')
-
-        # write dataframe
-        wb.sheets['temp']['A1'].value = df
-        wb.sheets['temp'].range('A1').expand('right').font.bold = True # bold header
-        wb.sheets['temp'].range('A1').expand('right').color = '#A9A9A9' # color header
-        wb.sheets['temp'].range('A1').expand('table').api.Borders.LineStyle = 1  # border
-        wb.sheets['temp'].range('A1').expand(
-            'table').api.HorizontalAlignment = xw.constants.HAlign.xlHAlignLeft  # left align
-        # wb.sheets['temp'].range('A1').expand(
-        #     'table').api.HorizontalAlignment = xw.constants.HAlign.xlHAlignCenter  # center align
-        wb.sheets['temp'].range('A1').expand('table').font.size = 9  # font 9
-        wb.sheets['temp'].autofit(axis="columns")  # autofit
-
-        # delete default sheets
-        wb.sheets['sheet1'].delete()
-        wb.sheets['sheet2'].delete()
-        wb.sheets['sheet3'].delete()
-
-        # excel 저장
-        wb.save(save_file_name)
-        wb.close()
-
-    # dataframe_manager = DataFrameManager()
-    # dataframe_manager.make_excel_writer('test_excel.xlsx')
-    # dataframe_manager.write_dataframe_to_excel(df2, sheet_name='df2_test_sheet')
-    # dataframe_manager.close_excel_writer()
+# dataframe_manager = DataFrameManager()
+# dataframe_manager.make_excel_writer('test_excel.xlsx')
+# dataframe_manager.write_dataframe_to_excel(df2, sheet_name='df2_test_sheet')
+# dataframe_manager.close_excel_writer()

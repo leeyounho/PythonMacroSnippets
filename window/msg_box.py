@@ -2,7 +2,7 @@ import traceback
 import win32api
 import win32con
 from plyer import notification
-
+# tkinter messagebox lib 가 더 좋음
 
 class MsgBox:
     def __init__(self, handler):
