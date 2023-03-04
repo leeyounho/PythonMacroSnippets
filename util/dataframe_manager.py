@@ -61,16 +61,42 @@ class DataFrameManager:
             ret_dict[value] = df_split
         return ret_dict
 
+    def split_and_explode_df_by_delimiter(self, df, column, delimiter):
+        df[column] = df[column].str.split(delimiter)  # split str to list
+        return df.explode('B', ignore_index=True)  # explode list
+
     # TODO
     # compare 2 dataframe and return diff dataframe.
+    # panastable애 hightlight, export 할 때도 highlight 할거 고려
+    # https://stackoverflow.com/questions/71604701/pandas-compare-two-data-frames-and-highlight-the-differences
     def df_compare_to_diff_df(self, df_left, df_right):
-        return
+        return df_left.compare(df_right)
 
 
 if __name__ == '__main__':
-    pass
+    dfm = DataFrameManager()
+    # df1 = pd.DataFrame({
+    #     "A": [1, 2, 3],
+    #     "B": ["apple\nfggffg\nfgfgdzdsf\n", "berry", "grapes"],
+    #     "C": ["red", "blue", "green"]
+    # },
+    #     columns=["A", "B", "C"])
+    #
+    # df2 = pd.DataFrame({
+    #     "A": [1, 2, 3],
+    #     "B": ["apple", "guava", "banana"],
+    #     "C": ["green", "blue", "green"]
+    # },
+    #     columns=["A", "B", "C"])
+    #
+    # print(df1)
+    # print()
+    # print(df2)
+    # print()
+    #
 
-# dataframe_manager = DataFrameManager()
-# dataframe_manager.make_excel_writer('test_excel.xlsx')
-# dataframe_manager.write_dataframe_to_excel(df2, sheet_name='df2_test_sheet')
-# dataframe_manager.close_excel_writer()
+    # df3 = dfm.df_compare_to_diff_df(df1, df2)
+    # print(df3)
+
+
+
