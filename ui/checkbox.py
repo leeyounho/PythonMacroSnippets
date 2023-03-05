@@ -20,16 +20,16 @@ class SelectTargetDatabaseApp:
 
             self.select_all_boolean_list.append(tk.BooleanVar())
             self.select_all_checkbutton_list.append(
-                tk.Checkbutton(frame, text="Select All", variable=self.select_all_boolean_list[i],
-                               command=lambda: self.__toggle_all(i)))
+                tk.Checkbutton(frame, text=f"Select All {i}", variable=self.select_all_boolean_list[i],
+                               command=lambda a=i: self.__toggle_all(a)))
             self.select_all_checkbutton_list[i].grid(row=0, column=0, sticky=tk.W)
 
             self.database_boolean_list.append([])
             self.database_checkbutton_list.append([])
             for j in range(3):
-                self.database_boolean_list[i].append(tk.BooleanVar)
-                self.database_checkbutton_list[i].append(tk.Checkbutton(frame, text=f"Database {j + 1}", variable=self.database_boolean_list[i][j],
-                                          command=lambda: self.__toggle(i, j)))
+                self.database_boolean_list[i].append(tk.BooleanVar())
+                self.database_checkbutton_list[i].append(
+                    tk.Checkbutton(frame, text=f"Database {j + 1}", variable=self.database_boolean_list[i][j]))
                 self.database_checkbutton_list[i][j].grid(row=j + 1, column=0, sticky=tk.W, padx=10)
 
         button = tk.Button(root, text='Go!', command=self.__select_database)
@@ -41,20 +41,17 @@ class SelectTargetDatabaseApp:
     def __toggle_all(self, i):
         if self.select_all_boolean_list[i].get():
             for checkbox in self.database_checkbutton_list[i]:
-                checkbox.deselect()
+                checkbox.select()
         else:
             for checkbox in self.database_checkbutton_list[i]:
-                checkbox.select()
+                checkbox.deselect()
 
-    def __toggle(self, i, j):
-        self.database_checkbutton_list[i][j].toggle()
-
-    def get_selected(self):
-        selected = []
-        for i, var in enumerate(self.checkbox_vars1):
-            if var.get():
-                selected.append(f"Checkbox {i + 1}")
-        return selected
+    # def get_selected(self):
+    #     selected = []
+    #     for i, var in enumerate(self.checkbox_vars1):
+    #         if var.get():
+    #             selected.append(f"Checkbox {i + 1}")
+    #     return selected
 
 
 if __name__ == '__main__':
