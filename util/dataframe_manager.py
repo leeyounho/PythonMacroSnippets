@@ -67,38 +67,49 @@ class DataFrameManager:
         df[column] = df[column].str.split(delimiter)  # split str to list
         return df.explode(column, ignore_index=True)  # explode list
 
-    # TODO
-    # compare 2 dataframe and return diff dataframe.
-    # panastable애 hightlight, export 할 때도 highlight 할거 고려
-    # https://stackoverflow.com/questions/71604701/pandas-compare-two-data-frames-and-highlight-the-differences
-    def df_compare_to_diff_df(self, df_left, df_right):
-        return df_left.compare(df_right)
+    def df_compare_by_merge(self, df_left, df_right, except_column_name_list=[]):
+        df_left_copied = df_left.copy()
+        df_right_copied = df_right.copy()
+        return df_left_copied.merge(df_right_copied,
+                                    on=self.get_column_list_without(df_left_copied, except_column_name_list),
+                                    indicator='diff', how='outer')
+
+    def df_compare_by_drop_and_merge(self, df_left, df_right, except_column_name_list=[]):
+        df_left_drop = df_left.drop(columns=except_column_name_list)
+        df_right_drop = df_right.drop(columns=except_column_name_list)
+        return df_left_drop.merge(df_right_drop, on=df_left_drop.columns.to_list(), indicator='diff', how='outer')
+
+    def get_column_list_without(self, df, column_name_list):
+        return df.columns.difference(column_name_list).tolist()
 
 
 if __name__ == '__main__':
     dfm = DataFrameManager()
-    # df1 = pd.DataFrame({
-    #     "A": [1, 2, 3],
-    #     "B": ["apple\nfggffg\nfgfgdzdsf\n", "berry", "grapes"],
-    #     "C": ["red", "blue", "green"]
-    # },
-    #     columns=["A", "B", "C"])
-    #
-    # df2 = pd.DataFrame({
-    #     "A": [1, 2, 3],
-    #     "B": ["apple", "guava", "banana"],
-    #     "C": ["green", "blue", "green"]
-    # },
-    #     columns=["A", "B", "C"])
-    #
-    # print(df1)
-    # print()
-    # print(df2)
-    # print()
-    #
+    df1 = pd.DataFrame({
+        "A": [1, 2, 3],
+        "B": ["apple\nfggffg\nfgfgdzdsf\n", "berry", "grapes"],
+        "C": ["red", "blue", "green"]
+    },
+        columns=["A", "B", "C"])
 
-    # df3 = dfm.df_compare_to_diff_df(df1, df2)
-    # print(df3)
+    df2 = pd.DataFrame({
+        "A": [1, 2, 3],
+        "B": ["apple", "berry", "banana"],
+        "C": ["green", "blue", "green"]
+    },
+        columns=["A", "B", "C"])
 
+    print(df1)
+    print()
 
+    print(df2)
+    print()
 
+    df_diff_1 = dfm.df_compare_by_merge(df1, df2, ['A'])
+    print(df_diff_1)
+    print()
+
+    df_diff_2 = dfm.df_compare_by_drop_and_merge(df1, df2, ['A'])
+    print(df_diff_2)
+    print()
+    # df_diff = df_diff.style.highlight_null()
