@@ -45,25 +45,27 @@ class DataFrameManager:
 
     # split dataframe to multi dataframe dict. delimiter is key. index will be reset
     def df_split_to_df_dict(self, df_to_split, delimiter_column_name):
+        temp_df = df_to_split.copy()
+
         # set the index to be this and don't drop
-        if delimiter_column_name not in df_to_split.columns:
+        if delimiter_column_name not in temp_df.columns:
             return {}
 
-        df_to_split.set_index(keys=[delimiter_column_name], drop=False, inplace=True)
+        temp_df.set_index(keys=[delimiter_column_name], drop=False, inplace=True)
 
         # get a list of names
-        value_list = df_to_split[delimiter_column_name].unique().tolist()
+        value_list = temp_df[delimiter_column_name].unique().tolist()
 
         # 합치기
         ret_dict = {}
         for value in value_list:
-            df_split = df_to_split.loc[df_to_split[delimiter_column_name] == value]
+            df_split = temp_df.loc[temp_df[delimiter_column_name] == value]
             ret_dict[value] = df_split
         return ret_dict
 
     def split_and_explode_df_by_delimiter(self, df, column, delimiter):
         df[column] = df[column].str.split(delimiter)  # split str to list
-        return df.explode('B', ignore_index=True)  # explode list
+        return df.explode(column, ignore_index=True)  # explode list
 
     # TODO
     # compare 2 dataframe and return diff dataframe.
