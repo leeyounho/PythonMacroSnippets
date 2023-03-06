@@ -46,14 +46,6 @@ class SelectTargetDatabaseApp:
             for checkbox in self.database_checkbutton_list[i]:
                 checkbox.deselect()
 
-    # def get_selected(self):
-    #     selected = []
-    #     for i, var in enumerate(self.checkbox_vars1):
-    #         if var.get():
-    #             selected.append(f"Checkbox {i + 1}")
-    #     return selected
-
-
 if __name__ == '__main__':
     temp_list = ['A', 'sdf']
     root = tk.Tk()
