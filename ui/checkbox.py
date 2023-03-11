@@ -39,8 +39,8 @@ class SelectTargetDatabaseApp:
                                    command=lambda a=i, b=j: self.__toggle(a, b)))
                 self.database_checkbutton_list[i][j].grid(row=j + 1, column=0, sticky=tk.W, padx=10)
 
-        button = tk.Button(root, text='Go!', command=self.__select_database)
-        button.grid(row=1, column=0, sticky='nesw', columnspan=3)
+        self.button = tk.Button(root, text='Go!', command=self.__select_database)
+        self.button.grid(row=1, column=0, sticky='nesw', columnspan=3)
 
         if mark_only_one_flag:
             for i, k in enumerate(self.select_all_checkbutton_list):
@@ -71,6 +71,7 @@ class SelectTargetDatabaseApp:
             for i, k in enumerate(self.select_all_checkbutton_list):
                 self.select_all_checkbutton_list[i].config(state=tk.DISABLED)
 
+        self.button['text'] = 'changed'
         return ret
 
     def __toggle_all(self, i):
