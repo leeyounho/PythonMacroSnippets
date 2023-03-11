@@ -65,7 +65,7 @@ class SelectTargetDatabaseApp:
                     ret.append(checkbutton)
                     print(checkbutton['text'])
 
-        if self.change_button_usage:
+        if self.change_button_usage and not self.mark_only_one_flag:
             self.mark_only_one_flag = True
 
             for i, k in enumerate(self.select_all_checkbutton_list):
@@ -85,5 +85,5 @@ class SelectTargetDatabaseApp:
 if __name__ == '__main__':
     temp_list = ['A', 'sdf']
     root = tk.Tk()
-    SelectTargetDatabaseApp(root, temp_list, mark_only_one_flag=True)
+    SelectTargetDatabaseApp(root, temp_list, change_button_usage=True, mark_only_one_flag=False)
     root.mainloop()
