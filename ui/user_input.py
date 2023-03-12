@@ -1,7 +1,7 @@
 import tkinter as tk
 
 
-class UserInputWindow:
+class UserInput:
     def __init__(self, parent, title="User Input", label_text="Enter input:", button_text="Submit"):
         self.parent = parent
         self.parent.title(title)
@@ -31,7 +31,7 @@ class UserInputWindow:
 
 if __name__ == '__main__':
     root = tk.Tk()
-    user_input_window = UserInputWindow(root)
+    user_input_window = UserInput(root)
     user_input_window.show()
 
     print(user_input_window.user_input)

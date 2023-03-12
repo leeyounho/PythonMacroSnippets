@@ -50,7 +50,7 @@ def on_tab_change(event):
   tab = event.widget.tab('current')['text']
   if tab == '페이지3':
       print('show 페이지3')
-      table.show()
+      # table.show()
       # table.close()
   else:
       print('close 페이지3')
